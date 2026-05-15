@@ -50,18 +50,12 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
     return (
       <div className={clsx(className)}>
         {label && (
-          <label
-            htmlFor={selectId}
-            className="text-sm mb-2 block text-gray-700"
-          >
+          <label htmlFor={selectId} className="form-label">
             {label}
           </label>
         )}
         {secondaryLabel && (
-          <label
-            htmlFor={selectId}
-            className="text-xs mb-2 block text-gray-700"
-          >
+          <label htmlFor={selectId} className="form-label" style={{ fontSize: 11 }}>
             {secondaryLabel}
           </label>
         )}
@@ -71,24 +65,14 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
           value={value}
           onChange={(e) => onChange(e.target.value)}
           onBlur={onBlur}
-          className={clsx(
-            { "border border-gray-300": showBorder },
-            { "border-red-500": hasErrors },
-            inputClassName,
-            { "!bg-gray-50 cursor-not-allowed": disabled },
-            "inline-block w-full py-2 px-4 rounded-md shadow-sm bg-white focus:ring-2 focus:ring-blue-400 focus:outline-none h-max min-h-[44px]"
-          )}
+          className={clsx("form-select", { "has-error": hasErrors }, { "opacity-50 cursor-not-allowed": disabled }, inputClassName)}
           disabled={disabled || readOnly}
           aria-invalid={hasErrors || undefined}
           aria-label={!label ? rest["aria-label"] : undefined}
           {...rest}
         >
           {options.map((option) => (
-            <option
-              className="whitespace-break-spaces text-wrap w-16 truncate"
-              key={option.value}
-              value={option.value}
-            >
+            <option key={option.value} value={option.value}>
               {option.label}
             </option>
           ))}

@@ -19,6 +19,28 @@ type SummaryProps = {
   activeTeam?: string;
 };
 
+const StatCard = ({
+  label,
+  value,
+  color,
+}: {
+  label: string;
+  value: string | number;
+  color: string;
+}) => (
+  <div
+    className="rounded-xl p-4 text-center"
+    style={{ background: color }}
+  >
+    <p className="text-xs font-semibold uppercase tracking-wide mb-1" style={{ color: "var(--text-secondary)" }}>
+      {label}
+    </p>
+    <p className="text-3xl font-bold font-display" style={{ color: "var(--navy)" }}>
+      {value}
+    </p>
+  </div>
+);
+
 const Summary = ({
   totalWorkers,
   presentWorkers,
@@ -33,68 +55,73 @@ const Summary = ({
 }: SummaryProps) => {
   const navigate = useNavigate();
   const percentagePresent = totalWorkers
-    ? ((presentWorkers / totalWorkers) * 100).toFixed(2)
-    : 0;
+    ? ((presentWorkers / totalWorkers) * 100).toFixed(1)
+    : "0.0";
 
   const getDepartment = (): SelectOption[] => {
     const departments = activeTeam ? departmentsWithTeams[activeTeam] : null;
     return departments
-      ? departments.map((department) => ({
-          label: department,
-          value: department,
-        }))
+      ? departments.map((department) => ({ label: department, value: department }))
       : [];
   };
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen flex items-center justify-center">
-      <div>
-        {type && type === "department" ? (
-          <button
-            className="ml-[85%] mb-6"
-            onClick={() => navigate("/admin/summary")}
-          >{`<- Back`}</button>
-        ) : (
-          <button
-            className="ml-[65%] mb-6"
-            onClick={() => navigate("/admin/department/summary")}
-          >{`Department summary ->`}</button>
-        )}
-        {type && type === "department" ? (
-          <div>
-            <Select options={teams} onChange={onChange} className="mb-3" />
+    <div className="min-h-screen px-3 sm:px-4 py-6" style={{ background: "var(--parchment)" }}>
+      <div className="w-full max-w-xl mx-auto">
+
+        {/* Nav */}
+        <div className="flex items-center justify-between mb-6">
+          {type === "department" ? (
+            <button
+              onClick={() => navigate("/admin/summary")}
+              className="btn-ghost"
+              style={{ padding: "8px 16px", fontSize: 13 }}
+            >
+              ← Back
+            </button>
+          ) : (
+            <div />
+          )}
+          {type !== "department" && (
+            <button
+              onClick={() => navigate("/admin/department/summary")}
+              className="btn-primary"
+              style={{ padding: "8px 16px", fontSize: 13 }}
+            >
+              Department →
+            </button>
+          )}
+        </div>
+
+        {/* Filters */}
+        <div className="card p-4 mb-4">
+          <Select options={teams} onChange={onChange} className="mb-3" label="Filter by team" />
+          {type === "department" && (
             <Select
-              options={getDepartment() || []}
+              options={getDepartment()}
               onChange={onChangeDepartment}
-              className="mb-3"
+              label="Filter by department"
             />
-          </div>
-        ) : (
-          <Select options={teams} onChange={onChange} className="mb-3" />
-        )}
-        <div className="bg-white shadow-lg rounded-2xl p-6 w-full max-w-lg">
-          <h2 className="text-xl font-bold text-center mb-4 px-24">
-            Workers Attendance Dashboard -{" "}
-            {team === "All" ? "All Teams" : team} - 21st February 2026
+          )}
+        </div>
+
+        {/* Dashboard card */}
+        <div className="card p-4 sm:p-6">
+          <div className="gold-rule mb-4" />
+          <h2 className="font-display text-lg sm:text-xl font-bold text-center mb-1" style={{ color: "var(--navy)" }}>
+            Workers Attendance
           </h2>
-          <div className="grid grid-cols-2 gap-4 text-center">
-            <div className="p-4 bg-blue-200 rounded-lg">
-              <h3 className="text-lg font-semibold">Total {title}</h3>
-              <p className="text-xl font-bold">{totalWorkers}</p>
-            </div>
-            <div className="p-4 bg-green-200 rounded-lg">
-              <h3 className="text-lg font-semibold">Present {title}</h3>
-              <p className="text-xl font-bold">{presentWorkers}</p>
-            </div>
-            <div className="p-4 bg-red-200 rounded-lg">
-              <h3 className="text-lg font-semibold">Absent {title}</h3>
-              <p className="text-xl font-bold">{absentWorkers}</p>
-            </div>
-            <div className="p-4 bg-yellow-200 rounded-lg">
-              <h3 className="text-lg font-semibold">% Present</h3>
-              <p className="text-xl font-bold">{percentagePresent}%</p>
-            </div>
+          <p className="text-center text-xs tracking-widest uppercase mb-5" style={{ color: "var(--gold)" }}>
+            {team === "All" ? "All Teams" : team}
+          </p>
+
+          <div className="grid grid-cols-2 gap-3">
+            <StatCard label={`Total${title ? ` ${title}` : ""}`} value={totalWorkers} color="var(--parchment-dark)" />
+            <StatCard label={`Present${title ? ` ${title}` : ""}`} value={presentWorkers} color="#e6f4ed" />
+            <StatCard label={`Absent${title ? ` ${title}` : ""}`} value={absentWorkers} color="#fef2f2" />
+            <StatCard label="% Present" value={`${percentagePresent}%`} color="#fefce8" />
           </div>
+          <div className="gold-rule mt-5" />
         </div>
       </div>
     </div>
