@@ -52,7 +52,6 @@ const updateWorker = async (person: Worker): Promise<Worker[] | null> => {
   const { data, error } = await supabase
     .from(table)
     .update({
-      ...rest,
       ispresent: true,
       updatedat: new Date().toISOString(),
     })

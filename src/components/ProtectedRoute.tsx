@@ -1,6 +1,6 @@
 import { useState, type ReactNode, type FormEvent } from "react";
 
-const STORAGE_KEY = "leaders_admin_unlocked";
+const STORAGE_KEY = "workers_admin_unlocked";
 
 type ProtectedRouteProps = {
   children: ReactNode;
