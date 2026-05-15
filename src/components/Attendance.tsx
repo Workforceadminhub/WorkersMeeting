@@ -143,7 +143,7 @@ const Attendance = () => {
           <p className="text-xs sm:text-sm font-semibold tracking-widest uppercase mb-1" style={{ color: "var(--gold)" }}>
             {titleLine1}
           </p>
-          <h1 className="font-display text-2xl sm:text-3xl font-bold leading-snug px-2" style={{ color: "var(--navy)" }}>
+          <h1 className="font-display font-bold leading-tight" style={{ color: "var(--navy)", fontSize: "clamp(1.1rem, 5vw, 1.75rem)" }}>
             {titleLine2}
           </h1>
           {titleLine3 && (
