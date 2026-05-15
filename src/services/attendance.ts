@@ -34,9 +34,16 @@ const manualAttendance = async (person: Worker): Promise<Worker[] | null> => {
   const { data, error } = await supabase
     .from(table)
     .insert({
-      ...person,
-      validate: true,
-      updatedat: new Date().toISOString(),
+      first_name:  person.first_name,
+      last_name:   person.last_name,
+      gender:      person.gender,
+      phone_number: person.phone_number,
+      team:        person.team,
+      department:  person.department,
+      role:        person.role,
+      fullname:    person.fullname,
+      ispresent:   true,
+      updatedat:   new Date().toISOString(),
     })
     .select("*");
 
