@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import supabase from "./supabase";
 import type { Worker } from "../types";
 
-const table = "leader";
+const table = "workers";
 
 const markPresent = async (person: Worker): Promise<Worker | null> => {
   const isPresentKey = "ispresent";

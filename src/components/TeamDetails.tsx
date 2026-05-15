@@ -50,13 +50,13 @@ const SORT_COLUMNS: Array<{
 const getSortValue = (r: LeaderDetail, key: SortKey): string | number => {
   switch (key) {
     case "name":
-      return `${r.lastname || ""} ${r.firstname || ""}`.trim().toLowerCase();
+      return `${r.last_name || ""} ${r.first_name || ""}`.trim().toLowerCase();
     case "phone":
-      return (r.phonenumber || "").toLowerCase();
+      return (r.phone_number || "").toLowerCase();
     case "department":
       return (r.department || "").toLowerCase();
     case "role":
-      return (r.workerrole || "").toLowerCase();
+      return (r.role || "").toLowerCase();
     case "gender":
       return (r.gender || "").toLowerCase();
     case "confirmed":
@@ -166,7 +166,7 @@ const TeamDetails = ({
       if (department && r.department !== department) return false;
       if (search) {
         const needle = search.toLowerCase();
-        const hay = `${r.firstname || ""} ${r.lastname || ""} ${r.phonenumber || ""}`.toLowerCase();
+        const hay = `${r.first_name || ""} ${r.last_name || ""} ${r.phone_number || ""}`.toLowerCase();
         if (!hay.includes(needle)) return false;
       }
       return true;
@@ -370,16 +370,16 @@ const TeamDetails = ({
               filtered.map((r) => (
                 <tr key={String(r.id)} className="hover:bg-gray-50">
                   <td className="border border-gray-300 px-3 py-2 font-medium text-gray-900">
-                    {r.firstname} {r.lastname}
+                    {r.first_name} {r.last_name}
                   </td>
                   <td className="border border-gray-300 px-3 py-2 text-gray-700">
-                    {r.phonenumber || "—"}
+                    {r.phone_number || "—"}
                   </td>
                   <td className="border border-gray-300 px-3 py-2 text-gray-700">
                     {r.department || "—"}
                   </td>
                   <td className="border border-gray-300 px-3 py-2 text-gray-700">
-                    {r.workerrole || "—"}
+                    {r.role || "—"}
                   </td>
                   <td className="border border-gray-300 px-3 py-2 text-gray-700">
                     {r.gender || "—"}

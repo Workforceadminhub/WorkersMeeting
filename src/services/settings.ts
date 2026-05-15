@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import supabase from "./supabase";
 
 export const DEFAULT_MEETING_TITLE =
-  "Leaders Meeting with Pastor Mayowa Agboade\nSaturday 18th April 2026";
+  "Workers Meeting with Pastor Mayowa Agboade\nSaturday, 16th May 2026";
 
 const fetchSetting = async <T = unknown>(key: string): Promise<T | null> => {
   const { data, error } = await supabase

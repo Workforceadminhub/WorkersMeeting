@@ -4,13 +4,13 @@ import type { ReportRowFilter } from "../utils/report";
 
 export type LeaderDetail = {
   id: number | string;
-  firstname: string | null;
-  lastname: string | null;
+  first_name: string | null;
+  last_name: string | null;
   fullname: string | null;
-  phonenumber: string | null;
+  phone_number: string | null;
   team: string | null;
   department: string | null;
-  workerrole: string | null;
+  role: string | null;
   gender: string | null;
   ispresent: boolean | null;
   isconfirmed: boolean | null;
@@ -25,9 +25,9 @@ const fetchPage = async (
   to: number
 ): Promise<LeaderDetail[]> => {
   let q = supabase
-    .from("leader")
+    .from("workers")
     .select(
-      "id, firstname, lastname, fullname, phonenumber, team, department, workerrole, gender, ispresent, isconfirmed, updatedat"
+      "id, first_name, last_name, fullname, phone_number, team, department, role, gender, ispresent, isconfirmed, updatedat"
     )
     .range(from, to);
 
@@ -64,7 +64,7 @@ const dedupeById = (rows: LeaderDetail[]) => {
   const seen = new Set<string | number>();
   const out: LeaderDetail[] = [];
   for (const r of rows) {
-    const key = r.id ?? `${r.firstname}-${r.lastname}-${r.phonenumber}`;
+    const key = r.id ?? `${r.first_name}-${r.last_name}-${r.phone_number}`;
     if (seen.has(key)) continue;
     seen.add(key);
     out.push(r);
@@ -74,16 +74,16 @@ const dedupeById = (rows: LeaderDetail[]) => {
 
 export const useLeaderDetails = (filters: ReportRowFilter[] | null) => {
   return useQuery({
-    queryKey: ["leader_details", filters],
+    queryKey: ["worker_details", filters],
     enabled: Boolean(filters && filters.length > 0),
     queryFn: async () => {
       if (!filters || filters.length === 0) return [] as LeaderDetail[];
       const results = await Promise.all(filters.map(fetchAllForFilter));
       return dedupeById(results.flat()).sort((a, b) => {
-        const an = `${a.lastname || ""} ${a.firstname || ""}`
+        const an = `${a.last_name || ""} ${a.first_name || ""}`
           .trim()
           .toLowerCase();
-        const bn = `${b.lastname || ""} ${b.firstname || ""}`
+        const bn = `${b.last_name || ""} ${b.first_name || ""}`
           .trim()
           .toLowerCase();
         return an.localeCompare(bn);

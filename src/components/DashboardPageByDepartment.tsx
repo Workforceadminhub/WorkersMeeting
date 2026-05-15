@@ -16,7 +16,7 @@ const DashboardPageByDepartment = () => {
   useEffect(() => {
     const fetchData = async () => {
       let query = supabase
-        .from("leader")
+        .from("workers")
         .select("*", { count: "exact", head: true });
       if (teamName !== "All") {
         query = query.eq("department", teamName);
@@ -25,7 +25,7 @@ const DashboardPageByDepartment = () => {
       setTotalWorkers(total || 0);
 
       let presentQuery = supabase
-        .from("leader")
+        .from("workers")
         .select("*", { count: "exact", head: true })
         .eq("ispresent", true);
       if (teamName !== "All") {
@@ -36,7 +36,7 @@ const DashboardPageByDepartment = () => {
       setAbsentWorkers((total || 0) - (present || 0));
 
       let confirmedQuery = supabase
-        .from("leader")
+        .from("workers")
         .select("*", { count: "exact", head: true })
         .eq("isconfirmed", true);
       if (teamName !== "All") {
@@ -46,7 +46,7 @@ const DashboardPageByDepartment = () => {
       setTotalConfirmed(confirmed || 0);
 
       let confirmedPresQuery = supabase
-        .from("leader")
+        .from("workers")
         .select("*", { count: "exact", head: true })
         .eq("isconfirmed", true)
         .eq("ispresent", true);

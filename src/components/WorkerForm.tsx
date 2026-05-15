@@ -148,7 +148,7 @@ const WorkerForm = ({
     void trigger();
   }, [initialValues, reset, trigger]);
 
-  const capitalizeOnBlur = (field: "firstname" | "lastname") => () => {
+  const capitalizeOnBlur = (field: "first_name" | "last_name") => () => {
     const current = getValues(field) || "";
     const next = capitalize(current.trim());
     if (next !== current) {
@@ -174,14 +174,14 @@ const WorkerForm = ({
           autoComplete="given-name"
           placeholder="First Name"
           className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
-          aria-invalid={errors.firstname ? true : undefined}
-          {...register("firstname", {
-            onBlur: capitalizeOnBlur("firstname"),
+          aria-invalid={errors.first_name ? true : undefined}
+          {...register("first_name", {
+            onBlur: capitalizeOnBlur("first_name"),
           })}
         />
-        {errors.firstname && (
+        {errors.first_name && (
           <p className="mt-1 text-xs text-red-600" role="alert">
-            {errors.firstname.message}
+            {errors.first_name.message}
           </p>
         )}
       </div>
@@ -199,14 +199,14 @@ const WorkerForm = ({
           autoComplete="family-name"
           placeholder="Last Name"
           className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
-          aria-invalid={errors.lastname ? true : undefined}
-          {...register("lastname", {
-            onBlur: capitalizeOnBlur("lastname"),
+          aria-invalid={errors.last_name ? true : undefined}
+          {...register("last_name", {
+            onBlur: capitalizeOnBlur("last_name"),
           })}
         />
-        {errors.lastname && (
+        {errors.last_name && (
           <p className="mt-1 text-xs text-red-600" role="alert">
-            {errors.lastname.message}
+            {errors.last_name.message}
           </p>
         )}
       </div>
@@ -237,7 +237,7 @@ const WorkerForm = ({
         </label>
         <Controller
           control={control}
-          name="phonenumber"
+          name="phone_number"
           render={({ field, fieldState }) => {
             const value = field.value || "";
             const length = value.length;
@@ -295,7 +295,7 @@ const WorkerForm = ({
 
       <Controller
         control={control}
-        name="workerrole"
+        name="role"
         render={({ field, fieldState }) => (
           <Select
             label="Role"

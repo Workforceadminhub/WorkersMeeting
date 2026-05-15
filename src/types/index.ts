@@ -5,18 +5,20 @@ export type WorkerFormValues = z.infer<typeof workerSchema>;
 
 export type Worker = WorkerFormValues & {
   id?: number | string;
-  identifier?: string | null;
+  worker_id?: string | null;
   fullname?: string | null;
   fullnamereverse?: string | null;
-  fullnamenoothername?: string | null;
-  fullnamenoothernamereverse?: string | null;
+  other_name?: string | null;
   email?: string | null;
+  address?: string | null;
+  employment?: string | null;
+  marital_status?: string | null;
+  birthdate?: string | null;
+  age_range?: string | null;
   updatedat?: string | null;
+  createdat?: string | null;
   ispresent?: boolean | null;
-  validate?: boolean | null;
-  isactive?: boolean | null;
   isconfirmed?: boolean | null;
-  campus?: string | null;
 };
 
 export type SelectOption = {

@@ -63,10 +63,10 @@ const Attendance = () => {
 
   const showConfirmation = (person: WorkerFormValues) => {
     setConfirmation({
-      name: `${person.firstname || ""} ${person.lastname || ""}`.trim(),
+      name: `${person.first_name || ""} ${person.last_name || ""}`.trim(),
       team: person.team,
       department: person.department,
-      role: person.workerrole,
+      role: person.role,
       timestamp: new Date(),
     });
     setQuery("");
@@ -85,7 +85,7 @@ const Attendance = () => {
   const handleSave = (values: WorkerFormValues) => {
     const payload: Worker = {
       ...values,
-      fullname: `${values.firstname.trim()} ${values.lastname.trim()}`.trim(),
+      fullname: `${values.first_name.trim()} ${values.last_name.trim()}`.trim(),
       ispresent: true,
     };
     manualAttendanceMutation(payload, {
@@ -104,7 +104,7 @@ const Attendance = () => {
     const payload: Worker = {
       ...(editInitialValues || {}),
       ...values,
-      fullname: `${values.firstname.trim()} ${values.lastname.trim()}`.trim(),
+      fullname: `${values.first_name.trim()} ${values.last_name.trim()}`.trim(),
       ispresent: true,
     };
     updateWorker(payload, {
@@ -204,11 +204,11 @@ const Attendance = () => {
                       >
                         <div className="flex flex-col">
                           <span className="text-gray-900">
-                            {person.firstname} {person.lastname}
+                            {person.first_name} {person.last_name}
                           </span>
-                          {person.workerrole && (
+                          {person.role && (
                             <span className="text-gray-600 text-sm">
-                              {person.workerrole}
+                              {person.role}
                             </span>
                           )}
                           {person.team ? (

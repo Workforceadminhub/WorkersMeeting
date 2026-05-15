@@ -17,8 +17,8 @@ const genderValues = GENDER_OPTIONS.map((option) => option.value);
 
 export const workerSchema = z
   .object({
-    firstname: z.string().trim().min(1, "First name is required"),
-    lastname: z.string().trim().min(1, "Last name is required"),
+    first_name: z.string().trim().min(1, "First name is required"),
+    last_name: z.string().trim().min(1, "Last name is required"),
     gender: z
       .string()
       .min(1, "Gender is required")
@@ -26,7 +26,7 @@ export const workerSchema = z
         (value) => (genderValues as readonly string[]).includes(value),
         "Choose a valid gender"
       ),
-    phonenumber: z.string().superRefine((value, ctx) => {
+    phone_number: z.string().superRefine((value, ctx) => {
       if (!value) {
         ctx.addIssue({
           code: z.ZodIssueCode.custom,
@@ -61,7 +61,7 @@ export const workerSchema = z
       .min(1, "Team is required")
       .refine((value) => value !== "All", "Team is required"),
     department: z.string().min(1, "Department is required"),
-    workerrole: z
+    role: z
       .string()
       .min(1, "Role is required")
       .refine(
@@ -89,11 +89,11 @@ export const workerSchema = z
   });
 
 export const defaultWorkerValues: z.infer<typeof workerSchema> = {
-  firstname: "",
-  lastname: "",
+  first_name: "",
+  last_name: "",
   gender: "",
-  phonenumber: "",
+  phone_number: "",
   team: "",
   department: "",
-  workerrole: "",
+  role: "",
 };
