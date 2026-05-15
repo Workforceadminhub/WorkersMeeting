@@ -39,7 +39,7 @@ const Attendance = () => {
   const queryClient = useQueryClient();
 
   const { title } = useMeetingTitle();
-  const [titleLine1, titleLine2] = title.split("\n");
+  const [titleLine1, titleLine2, titleLine3] = title.split("\n");
 
   useEffect(() => {
     return () => {
@@ -140,12 +140,15 @@ const Attendance = () => {
             />
           </div>
           <div className="gold-rule mb-4" />
-          <h1 className="font-display text-2xl sm:text-3xl font-bold leading-snug px-2" style={{ color: "var(--navy)" }}>
+          <p className="text-xs sm:text-sm font-semibold tracking-widest uppercase mb-1" style={{ color: "var(--gold)" }}>
             {titleLine1}
+          </p>
+          <h1 className="font-display text-2xl sm:text-3xl font-bold leading-snug px-2" style={{ color: "var(--navy)" }}>
+            {titleLine2}
           </h1>
-          {titleLine2 && (
+          {titleLine3 && (
             <p className="mt-1 text-xs sm:text-sm font-medium tracking-widest uppercase" style={{ color: "var(--gold)" }}>
-              {titleLine2}
+              {titleLine3}
             </p>
           )}
           <div className="gold-rule mt-4" />
