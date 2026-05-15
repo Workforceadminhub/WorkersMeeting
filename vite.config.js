@@ -9,9 +9,9 @@ export default defineConfig({
       registerType: "autoUpdate",
       includeAssets: ["favicon.ico", "logo.jpg", "logo192.png", "logo512.png"],
       manifest: {
-        name: "Leaders Meeting",
-        short_name: "Leaders Meeting",
-        description: "Leaders Meeting attendance for HICC Gbagada",
+        name: "Workers Meeting",
+        short_name: "Workers Meeting",
+        description: "Workers Meeting attendance for Harvesters Gbagada",
         start_url: "/",
         display: "standalone",
         theme_color: "#000000",
