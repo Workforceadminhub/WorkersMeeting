@@ -127,24 +127,24 @@ const Attendance = () => {
 
   return (
     <div className="min-h-screen flex flex-col md:items-center" style={{ background: "var(--parchment)" }}>
-      <div className="w-full max-w-xl px-4">
+      <div className="w-full max-w-xl px-3 sm:px-4">
 
         {/* Header */}
-        <header className="text-center pt-8 pb-6">
-          <div className="flex justify-center mb-5">
+        <header className="text-center pt-6 sm:pt-10 pb-4 sm:pb-6">
+          <div className="flex justify-center mb-4 sm:mb-6">
             <img
               src="/logo.jpg"
               alt="Harvesters International Christian Center Logo"
-              className="w-24 h-24 object-contain"
-              style={{ borderRadius: 12 }}
+              className="w-48 h-48 sm:w-56 sm:h-56 object-contain"
+              style={{ borderRadius: 16, mixBlendMode: "multiply" }}
             />
           </div>
           <div className="gold-rule mb-4" />
-          <h1 className="font-display text-2xl font-bold leading-snug" style={{ color: "var(--navy)" }}>
+          <h1 className="font-display text-2xl sm:text-3xl font-bold leading-snug px-2" style={{ color: "var(--navy)" }}>
             {titleLine1}
           </h1>
           {titleLine2 && (
-            <p className="mt-1 text-sm font-medium tracking-widest uppercase" style={{ color: "var(--gold)" }}>
+            <p className="mt-1 text-xs sm:text-sm font-medium tracking-widest uppercase" style={{ color: "var(--gold)" }}>
               {titleLine2}
             </p>
           )}
@@ -152,7 +152,7 @@ const Attendance = () => {
         </header>
 
         {/* Main card */}
-        <div className="card p-6 mb-24">
+        <div className="card p-4 sm:p-6 mb-24">
           {confirmation ? (
             <div
               role="status"
@@ -205,7 +205,7 @@ const Attendance = () => {
                   <ul className="space-y-2">
                     {filteredPeople.map((person, index) => (
                       <li key={index} className="worker-card">
-                        <div className="flex flex-col gap-0.5">
+                        <div className="worker-info flex flex-col gap-0.5">
                           <span className="font-semibold text-sm" style={{ color: "var(--navy)" }}>
                             {person.first_name} {person.last_name}
                           </span>
