@@ -162,10 +162,7 @@ const WorkerForm = ({
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
       <div>
-        <label
-          htmlFor={`${idPrefix}-firstname`}
-          className="text-sm mb-2 block text-gray-700"
-        >
+        <label htmlFor={`${idPrefix}-firstname`} className="form-label">
           First name
         </label>
         <input
@@ -173,7 +170,7 @@ const WorkerForm = ({
           type="text"
           autoComplete="given-name"
           placeholder="First Name"
-          className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
+          className="form-input"
           aria-invalid={errors.first_name ? true : undefined}
           {...register("first_name", {
             onBlur: capitalizeOnBlur("first_name"),
@@ -187,10 +184,7 @@ const WorkerForm = ({
       </div>
 
       <div>
-        <label
-          htmlFor={`${idPrefix}-lastname`}
-          className="text-sm mb-2 block text-gray-700"
-        >
+        <label htmlFor={`${idPrefix}-lastname`} className="form-label">
           Last name
         </label>
         <input
@@ -198,7 +192,7 @@ const WorkerForm = ({
           type="text"
           autoComplete="family-name"
           placeholder="Last Name"
-          className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
+          className="form-input"
           aria-invalid={errors.last_name ? true : undefined}
           {...register("last_name", {
             onBlur: capitalizeOnBlur("last_name"),
@@ -229,10 +223,7 @@ const WorkerForm = ({
       />
 
       <div>
-        <label
-          htmlFor={`${idPrefix}-phone`}
-          className="text-sm mb-2 block text-gray-700"
-        >
+        <label htmlFor={`${idPrefix}-phone`} className="form-label">
           Phone number
         </label>
         <Controller
@@ -252,35 +243,24 @@ const WorkerForm = ({
                   pattern={`\\d{${PHONE_LENGTH}}`}
                   maxLength={PHONE_LENGTH}
                   placeholder={`${PHONE_LENGTH}-digit phone number`}
-                  className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
+                  className="form-input"
                   value={value}
                   onBlur={field.onBlur}
                   onChange={(e) =>
-                    field.onChange(
-                      onlyDigits(e.target.value).slice(0, PHONE_LENGTH)
-                    )
+                    field.onChange(onlyDigits(e.target.value).slice(0, PHONE_LENGTH))
                   }
                   aria-invalid={showError ? true : undefined}
                   aria-describedby={`${idPrefix}-phone-hint`}
                 />
-                <div
-                  id={`${idPrefix}-phone-hint`}
-                  className="mt-1 flex items-center justify-between text-xs"
-                >
+                <div id={`${idPrefix}-phone-hint`} className="mt-1 flex items-center justify-between text-xs">
                   {showError ? (
-                    <p className="text-red-600" role="alert">
-                      {fieldState.error?.message}
-                    </p>
+                    <p className="text-red-600" role="alert">{fieldState.error?.message}</p>
                   ) : (
                     <span aria-hidden="true" />
                   )}
                   <span
                     aria-hidden="true"
-                    className={
-                      length === PHONE_LENGTH
-                        ? "text-green-600"
-                        : "text-gray-400"
-                    }
+                    style={{ color: length === PHONE_LENGTH ? "var(--green)" : "var(--text-muted)" }}
                   >
                     {length}/{PHONE_LENGTH}
                   </span>
@@ -310,25 +290,17 @@ const WorkerForm = ({
         )}
       />
 
-      <div className="flex space-x-2">
-        <button
-          type="button"
-          onClick={onCancel}
-          className="w-full py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 focus:ring-2 focus:ring-red-400 focus:outline-none"
-        >
+      <div className="flex space-x-3 pt-2">
+        <button type="button" onClick={onCancel} className="btn-ghost w-full">
           Cancel
         </button>
         <button
           type="submit"
           disabled={buttonDisabled}
           aria-disabled={buttonDisabled}
-          className={`w-full py-2 text-white rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none ${
-            buttonDisabled
-              ? "bg-gray-300 cursor-not-allowed"
-              : "bg-blue-500 hover:bg-blue-600 cursor-pointer"
-          }`}
+          className="btn-submit w-full"
         >
-          {isSubmitting ? "Saving..." : submitLabel}
+          {isSubmitting ? "Saving…" : submitLabel}
         </button>
       </div>
     </form>
