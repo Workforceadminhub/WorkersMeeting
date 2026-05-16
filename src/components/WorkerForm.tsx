@@ -9,6 +9,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import capitalize from "lodash/capitalize";
 import Select from "./Dropdown";
+import { onlyDigits, withPlaceholder } from "../utils/input";
 import {
   GENDER_OPTIONS,
   PHONE_LENGTH,
@@ -19,7 +20,6 @@ import { departmentsWithTeams, teamsSummary } from "../utils/options";
 import { workerrolesoptions } from "../utils/teams";
 import type { WorkerFormValues } from "../types";
 
-const onlyDigits = (value: string) => (value || "").replace(/\D/g, "");
 
 type TeamDepartmentSelectsProps = {
   control: Control<WorkerFormValues>;
@@ -33,22 +33,13 @@ const TeamDepartmentSelects = ({
   const team = useWatch({ control, name: "team" });
 
   const teamOptions = useMemo(
-    () => [
-      { label: "Choose team", value: "" },
-      ...teamsSummary.filter((option) => option.value !== "All"),
-    ],
+    () => withPlaceholder(teamsSummary.filter((o) => o.value !== "All"), "Choose team"),
     []
   );
 
   const departmentOptions = useMemo(() => {
     const list = team ? departmentsWithTeams[team] || [] : [];
-    return [
-      { label: "Choose department", value: "" },
-      ...list.map((department) => ({
-        label: department,
-        value: department,
-      })),
-    ];
+    return withPlaceholder(list.map((d) => ({ label: d, value: d })), "Choose department");
   }, [team]);
 
   return (
@@ -110,18 +101,12 @@ const WorkerForm = ({
   onCancel,
 }: WorkerFormProps) => {
   const roleOptions = useMemo(
-    () => [
-      { label: "Choose role", value: "" },
-      ...workerrolesoptions.filter((option) => option.value !== "All"),
-    ],
+    () => withPlaceholder(workerrolesoptions.filter((o) => o.value !== "All"), "Choose role"),
     []
   );
 
   const genderOptions = useMemo(
-    () => [
-      { label: "Choose gender", value: "" },
-      ...GENDER_OPTIONS.map((o) => ({ label: o.label, value: o.value })),
-    ],
+    () => withPlaceholder(GENDER_OPTIONS.map((o) => ({ label: o.label, value: o.value })), "Choose gender"),
     []
   );
 

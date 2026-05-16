@@ -3,6 +3,19 @@ import Summary from "./Summary";
 import supabase from "../services/supabase";
 import { teamsSummary } from "../utils/options";
 
+const countWorkers = async (filters: {
+  ispresent?: boolean;
+  isconfirmed?: boolean;
+  department?: string;
+}): Promise<number> => {
+  let q = supabase.from("workers").select("*", { count: "exact", head: true });
+  if (filters.ispresent !== undefined) q = q.eq("ispresent", filters.ispresent);
+  if (filters.isconfirmed !== undefined) q = q.eq("isconfirmed", filters.isconfirmed);
+  if (filters.department && filters.department !== "All") q = q.eq("department", filters.department);
+  const { count } = await q;
+  return count || 0;
+};
+
 const DashboardPageByDepartment = () => {
   const [totalWorkers, setTotalWorkers] = useState(0);
   const [presentWorkers, setPresentWorkers] = useState(0);
@@ -15,59 +28,25 @@ const DashboardPageByDepartment = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      let query = supabase
-        .from("workers")
-        .select("*", { count: "exact", head: true });
-      if (teamName !== "All") {
-        query = query.eq("department", teamName);
-      }
-      const { count: total } = await query;
-      setTotalWorkers(total || 0);
+      const dept = teamName !== "All" ? teamName : undefined;
 
-      let presentQuery = supabase
-        .from("workers")
-        .select("*", { count: "exact", head: true })
-        .eq("ispresent", true);
-      if (teamName !== "All") {
-        presentQuery = presentQuery.eq("department", teamName);
-      }
-      const { count: present } = await presentQuery;
-      setPresentWorkers(present || 0);
-      setAbsentWorkers((total || 0) - (present || 0));
+      const [total, present, confirmed, confirmedPres] = await Promise.all([
+        countWorkers({ department: dept }),
+        countWorkers({ ispresent: true, department: dept }),
+        countWorkers({ isconfirmed: true, department: dept }),
+        countWorkers({ isconfirmed: true, ispresent: true, department: dept }),
+      ]);
 
-      let confirmedQuery = supabase
-        .from("workers")
-        .select("*", { count: "exact", head: true })
-        .eq("isconfirmed", true);
-      if (teamName !== "All") {
-        confirmedQuery = confirmedQuery.eq("department", teamName);
-      }
-      const { count: confirmed } = await confirmedQuery;
-      setTotalConfirmed(confirmed || 0);
-
-      let confirmedPresQuery = supabase
-        .from("workers")
-        .select("*", { count: "exact", head: true })
-        .eq("isconfirmed", true)
-        .eq("ispresent", true);
-      if (teamName !== "All") {
-        confirmedPresQuery = confirmedPresQuery.eq("department", teamName);
-      }
-      const { count: confirmedPres } = await confirmedPresQuery;
-      setConfirmedPresent(confirmedPres || 0);
-
-      setConfirmedAbsent((confirmed || 0) - (confirmedPres || 0));
+      setTotalWorkers(total);
+      setPresentWorkers(present);
+      setAbsentWorkers(total - present);
+      setTotalConfirmed(confirmed);
+      setConfirmedPresent(confirmedPres);
+      setConfirmedAbsent(confirmed - confirmedPres);
     };
 
     fetchData();
   }, [teamName]);
-
-  const onChange = (val: string) => {
-    setActiveTeam(val);
-  };
-  const onChangeDepartment = (val: string) => {
-    setTeamName(val);
-  };
 
   return (
     <div>
@@ -80,9 +59,9 @@ const DashboardPageByDepartment = () => {
         totalConfirmed={totalConfirmed}
         teams={teamsSummary}
         team={teamName}
-        onChange={onChange}
+        onChange={setActiveTeam}
         type="department"
-        onChangeDepartment={onChangeDepartment}
+        onChangeDepartment={setTeamName}
         activeTeam={activeTeam}
       />
     </div>

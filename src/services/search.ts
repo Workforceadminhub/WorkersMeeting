@@ -1,9 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import supabase from "./supabase";
+import { sanitise } from "../utils/input";
 import type { Worker } from "../types";
-
-const sanitise = (input: string) =>
-  input.trim().slice(0, 100).replace(/[<>"'`;]/g, "");
 
 const searchWorkers = async (
   searchParams: string | undefined | null

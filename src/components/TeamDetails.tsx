@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useLeaderDetails, type LeaderDetail } from "../services/leaderDetails";
 import { rowMatcher, type ReportRowFilter } from "../utils/report";
+import { formatTime, formatWorkerName } from "../utils/formatting";
 
 type TeamChoice = { label: string; filter: ReportRowFilter };
 
@@ -50,7 +51,7 @@ const SORT_COLUMNS: Array<{
 const getSortValue = (r: LeaderDetail, key: SortKey): string | number => {
   switch (key) {
     case "name":
-      return `${r.last_name || ""} ${r.first_name || ""}`.trim().toLowerCase();
+      return formatWorkerName(r.last_name, r.first_name).toLowerCase();
     case "phone":
       return (r.phone_number || "").toLowerCase();
     case "department":
@@ -202,20 +203,6 @@ const TeamDetails = ({
       confirmed,
     };
   }, [data, stats]);
-
-  const formatTime = (iso: string | null) => {
-    if (!iso) return "—";
-    try {
-      return new Date(iso).toLocaleString(undefined, {
-        month: "short",
-        day: "numeric",
-        hour: "numeric",
-        minute: "2-digit",
-      });
-    } catch {
-      return iso;
-    }
-  };
 
   return (
     <div>

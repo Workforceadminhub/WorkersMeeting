@@ -10,6 +10,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import WorkerForm from "./WorkerForm";
 import { useMeetingTitle } from "../services/settings";
+import { formatWorkerName, formatConfirmationTime } from "../utils/formatting";
 import type { Worker, WorkerFormValues } from "../types";
 
 const CONFIRMATION_TIMEOUT_MS = 4500;
@@ -62,7 +63,7 @@ const Attendance = () => {
 
   const showConfirmation = (person: WorkerFormValues) => {
     setConfirmation({
-      name: `${person.first_name || ""} ${person.last_name || ""}`.trim(),
+      name: formatWorkerName(person.first_name, person.last_name),
       team: person.team,
       department: person.department,
       role: person.role,
@@ -82,7 +83,7 @@ const Attendance = () => {
   const handleSave = (values: WorkerFormValues) => {
     const payload: Worker = {
       ...values,
-      fullname: `${values.first_name.trim()} ${values.last_name.trim()}`.trim(),
+      fullname: formatWorkerName(values.first_name, values.last_name),
       ispresent: true,
     };
     manualAttendanceMutation(payload, {
@@ -101,7 +102,7 @@ const Attendance = () => {
     const payload: Worker = {
       ...(editInitialValues || {}),
       ...values,
-      fullname: `${values.first_name.trim()} ${values.last_name.trim()}`.trim(),
+      fullname: formatWorkerName(values.first_name, values.last_name),
       ispresent: true,
     };
     updateWorker(payload, {
@@ -121,9 +122,6 @@ const Attendance = () => {
     setEditInitialValues(person);
     setIsEditing(true);
   };
-
-  const formatTime = (date: Date) =>
-    date.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
 
   return (
     <div className="min-h-screen flex flex-col md:items-center" style={{ background: "var(--parchment)" }}>
@@ -180,7 +178,7 @@ const Attendance = () => {
                 </p>
               )}
               <p className="text-xs mt-2" style={{ color: "var(--text-muted)" }}>
-                {formatTime(confirmation.timestamp)}
+                {formatConfirmationTime(confirmation.timestamp)}
               </p>
               <div className="gold-rule mt-6 mb-6 w-full" />
               <button onClick={dismissConfirmation} className="btn-submit w-full max-w-xs">
