@@ -1,6 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import supabase from "./supabase";
 import type { ReportRowFilter } from "../utils/report";
+import { PAGE_SIZE, GENERIC_ERROR } from "../utils/constants";
+import { formatWorkerName } from "../utils/formatting";
 
 export type LeaderDetail = {
   id: number | string;
@@ -16,8 +18,6 @@ export type LeaderDetail = {
   isconfirmed: boolean | null;
   updatedat: string | null;
 };
-
-const PAGE_SIZE = 1000;
 
 const fetchPage = async (
   filter: ReportRowFilter,
@@ -40,8 +40,8 @@ const fetchPage = async (
   }
 
   const { data, error } = await q;
-  if (error) throw new Error("Something went wrong. Please try again.");
-  return (data || []) as LeaderDetail[];
+  if (error) throw new Error(GENERIC_ERROR);
+  return (data ?? []) as LeaderDetail[];
 };
 
 const fetchAllForFilter = async (
@@ -60,7 +60,7 @@ const fetchAllForFilter = async (
   return all;
 };
 
-const dedupeById = (rows: LeaderDetail[]) => {
+const dedupeById = (rows: LeaderDetail[]): LeaderDetail[] => {
   const seen = new Set<string | number>();
   const out: LeaderDetail[] = [];
   for (const r of rows) {
@@ -76,18 +76,16 @@ export const useLeaderDetails = (filters: ReportRowFilter[] | null) => {
   return useQuery({
     queryKey: ["worker_details", filters],
     enabled: Boolean(filters && filters.length > 0),
-    queryFn: async () => {
-      if (!filters || filters.length === 0) return [] as LeaderDetail[];
+    queryFn: async (): Promise<LeaderDetail[]> => {
+      if (!filters || filters.length === 0) return [];
       const results = await Promise.all(filters.map(fetchAllForFilter));
-      return dedupeById(results.flat()).sort((a, b) => {
-        const an = `${a.last_name || ""} ${a.first_name || ""}`
-          .trim()
-          .toLowerCase();
-        const bn = `${b.last_name || ""} ${b.first_name || ""}`
-          .trim()
-          .toLowerCase();
-        return an.localeCompare(bn);
-      });
+      return dedupeById(results.flat()).sort((a, b) =>
+        formatWorkerName(a.last_name, a.first_name)
+          .toLowerCase()
+          .localeCompare(
+            formatWorkerName(b.last_name, b.first_name).toLowerCase()
+          )
+      );
     },
     staleTime: 30 * 1000,
     refetchOnWindowFocus: false,

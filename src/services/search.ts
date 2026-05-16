@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import supabase from "./supabase";
 import { sanitise } from "../utils/input";
+import { GENERIC_ERROR } from "../utils/constants";
 import type { Worker } from "../types";
 
 const searchWorkers = async (
@@ -13,7 +14,7 @@ const searchWorkers = async (
     search_text: cleaned,
   });
   if (error) {
-    throw new Error("Search failed. Please try again.");
+    throw new Error(GENERIC_ERROR);
   }
   return (data as Worker[]) ?? [];
 };

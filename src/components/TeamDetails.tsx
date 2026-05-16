@@ -111,7 +111,7 @@ const TeamDetails = ({
   onClose: () => void;
 }) => {
   const filters = scope.kind === "row" ? [scope.filter] : scope.filters;
-  const { data, isLoading, isError, error } = useLeaderDetails(filters);
+  const { data, isLoading, isError } = useLeaderDetails(filters);
 
   const isDirectorate = scope.kind === "directorate";
   const teamChoices = isDirectorate ? scope.teams : [];

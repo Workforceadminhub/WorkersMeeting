@@ -1,13 +1,17 @@
 import debounce from "lodash/debounce";
-import { useCallback, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { DEBOUNCE_MS } from "../utils/constants";
 
 export const useDebouncedSearch = () => {
   const [search, setSearch] = useState("");
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const debouncedSearch = useCallback(
-    debounce((query: string) => setSearch(query), 500),
-    []
+  const debouncedRef = useRef(
+    debounce((query: string) => setSearch(query), DEBOUNCE_MS)
   );
 
-  return { debouncedSearch, search };
+  useEffect(() => {
+    const fn = debouncedRef.current;
+    return () => fn.cancel();
+  }, []);
+
+  return { debouncedSearch: debouncedRef.current, search };
 };

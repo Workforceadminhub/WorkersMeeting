@@ -1,72 +1,41 @@
 import { useMutation } from "@tanstack/react-query";
 import supabase from "./supabase";
 import { nowISO } from "../utils/formatting";
+import { GENERIC_ERROR } from "../utils/constants";
 import type { Worker } from "../types";
 
 const table = "workers";
-
-const markPresent = async (person: Worker): Promise<Worker | null> => {
-  const isPresentKey = "ispresent";
-  const { data: worker } = await supabase
-    .from(table)
-    .select("*")
-    .eq("id", person.id as number | string);
-
-  if (!worker || worker.length === 0) return null;
-  const workerAttendance = (worker[0] as Worker)[isPresentKey];
-  if (workerAttendance) return worker[0] as Worker;
-
-  const { data, error } = await supabase
-    .from(table)
-    .update({ [isPresentKey]: true, updatedat: nowISO() })
-    .eq("id", person.id as number | string);
-
-  if (error) {
-    throw new Error("Something went wrong. Please try again.");
-  }
-
-  return data as Worker | null;
-};
 
 const manualAttendance = async (person: Worker): Promise<Worker[] | null> => {
   const { data, error } = await supabase
     .from(table)
     .insert({
-      first_name:  person.first_name,
-      last_name:   person.last_name,
-      gender:      person.gender,
+      first_name: person.first_name,
+      last_name: person.last_name,
+      gender: person.gender,
       phone_number: person.phone_number,
-      team:        person.team,
-      department:  person.department,
-      role:        person.role,
-      fullname:    person.fullname,
-      ispresent:   true,
-      updatedat:   nowISO(),
+      team: person.team,
+      department: person.department,
+      role: person.role,
+      fullname: person.fullname,
+      ispresent: true,
+      updatedat: nowISO(),
     })
     .select("*");
 
-  if (error) {
-    throw new Error("Something went wrong. Please try again.");
-  }
-
+  if (error) throw new Error(GENERIC_ERROR);
   return data as Worker[] | null;
 };
 
 const updateWorker = async (person: Worker): Promise<Worker[] | null> => {
-  const { id, ...rest } = person;
+  const { id } = person;
   const { data, error } = await supabase
     .from(table)
-    .update({
-      ispresent: true,
-      updatedat: new Date().toISOString(),
-    })
+    .update({ ispresent: true, updatedat: nowISO() })
     .eq("id", id as number | string)
     .select("*");
 
-  if (error) {
-    throw new Error("Something went wrong. Please try again.");
-  }
-
+  if (error) throw new Error(GENERIC_ERROR);
   return data as Worker[] | null;
 };
 

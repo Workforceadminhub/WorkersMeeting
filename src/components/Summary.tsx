@@ -7,9 +7,6 @@ type SummaryProps = {
   totalWorkers: number;
   presentWorkers: number;
   absentWorkers: number;
-  confirmedPresent?: number;
-  confirmedAbsent?: number;
-  totalConfirmed?: number;
   teams: SelectOption[];
   onChange: (value: string) => void;
   team: string;

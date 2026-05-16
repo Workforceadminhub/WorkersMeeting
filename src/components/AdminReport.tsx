@@ -104,7 +104,7 @@ const DirectorateRows = ({
 const AdminReport = () => {
   const navigate = useNavigate();
   const { title } = useMeetingTitle();
-  const { data, isLoading, isError, error, refetch, isFetching } =
+  const { data, isLoading, isError, refetch, isFetching } =
     useReportData();
 
   const openDirectorate = (label: string) =>
