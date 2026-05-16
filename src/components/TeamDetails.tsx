@@ -341,7 +341,7 @@ const TeamDetails = ({
                   className="border border-gray-300 px-3 py-4 text-center text-red-600"
                 >
                   Could not load workers
-                  {error instanceof Error ? `: ${error.message}` : ""}
+                  
                 </td>
               </tr>
             ) : filtered.length === 0 ? (

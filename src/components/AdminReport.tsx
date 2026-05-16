@@ -164,7 +164,7 @@ const AdminReport = () => {
                 <tr>
                   <Cell className="text-center text-red-600" colSpan={8}>
                     Could not load report
-                    {error instanceof Error ? `: ${error.message}` : ""}
+                    
                   </Cell>
                 </tr>
               ) : (

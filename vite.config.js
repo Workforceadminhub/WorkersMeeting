@@ -14,8 +14,8 @@ export default defineConfig({
         description: "Workers Meeting attendance for Harvesters Gbagada",
         start_url: "/",
         display: "standalone",
-        theme_color: "#000000",
-        background_color: "#ffffff",
+        theme_color: "#1a1a2e",
+        background_color: "#faf7f2",
         icons: [
           {
             src: "/logo192.png",
@@ -40,17 +40,19 @@ export default defineConfig({
         globPatterns: ["**/*.{js,css,html,ico,png,jpg,svg,webmanifest}"],
         runtimeCaching: [
           {
-            urlPattern: /^https:\/\/[a-z0-9-]+\.supabase\.co\/.*$/i,
+            // Only cache the non-sensitive app_settings endpoint (meeting title)
+            urlPattern: /^https:\/\/[a-z0-9-]+\.supabase\.co\/rest\/v1\/app_settings/i,
             handler: "NetworkFirst",
             options: {
-              cacheName: "supabase-api",
+              cacheName: "supabase-settings",
               networkTimeoutSeconds: 5,
               expiration: {
-                maxEntries: 50,
-                maxAgeSeconds: 60 * 60,
+                maxEntries: 5,
+                maxAgeSeconds: 5 * 60,
               },
             },
           },
+          // All other Supabase calls (worker data, attendance) are NOT cached
         ],
       },
     }),

@@ -204,8 +204,8 @@ const Attendance = () => {
               {!isCreating && !isEditing && searchValue && filteredPeople && filteredPeople.length > 0 ? (
                 <div className="fade-up">
                   <ul className="space-y-2">
-                    {filteredPeople.map((person, index) => (
-                      <li key={index} className="worker-card">
+                    {filteredPeople.map((person) => (
+                      <li key={String(person.id ?? person.phone_number)} className="worker-card">
                         <div className="worker-info flex flex-col gap-0.5">
                           <span className="font-semibold text-sm" style={{ color: "var(--navy)" }}>
                             {person.first_name} {person.last_name}
