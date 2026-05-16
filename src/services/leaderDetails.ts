@@ -40,7 +40,7 @@ const fetchPage = async (
   }
 
   const { data, error } = await q;
-  if (error) throw new Error(error.message);
+  if (error) throw new Error("Something went wrong. Please try again.");
   return (data || []) as LeaderDetail[];
 };
 

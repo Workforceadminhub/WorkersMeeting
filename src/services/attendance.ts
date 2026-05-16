@@ -24,7 +24,7 @@ const markPresent = async (person: Worker): Promise<Worker | null> => {
     .eq("id", person.id as number | string);
 
   if (error) {
-    throw new Error(error.message);
+    throw new Error("Something went wrong. Please try again.");
   }
 
   return data as Worker | null;
@@ -48,7 +48,7 @@ const manualAttendance = async (person: Worker): Promise<Worker[] | null> => {
     .select("*");
 
   if (error) {
-    throw new Error(error.message);
+    throw new Error("Something went wrong. Please try again.");
   }
 
   return data as Worker[] | null;
@@ -66,7 +66,7 @@ const updateWorker = async (person: Worker): Promise<Worker[] | null> => {
     .select("*");
 
   if (error) {
-    throw new Error(error.message);
+    throw new Error("Something went wrong. Please try again.");
   }
 
   return data as Worker[] | null;

@@ -13,7 +13,7 @@ const fetchAllLeaderAggRows = async (): Promise<LeaderAggRow[]> => {
       .from("workers")
       .select("team, department, ispresent, isconfirmed")
       .range(from, to);
-    if (error) throw new Error(error.message);
+    if (error) throw new Error("Something went wrong. Please try again.");
     if (!data || data.length === 0) break;
     all.push(...(data as LeaderAggRow[]));
     if (data.length < PAGE_SIZE) break;
