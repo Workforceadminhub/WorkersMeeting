@@ -13,12 +13,6 @@ export type ReportRowFilter =
 export type ReportRow = {
   label: string;
   filter: ReportRowFilter;
-  /**
-   * Optional manual override for team strength. When set, the report
-   * uses this value as the denominator instead of counting rows in
-   * the `leader` table. Present/absent stay DB-driven.
-   */
-  strength?: number;
 };
 
 export type Directorate = {
@@ -57,12 +51,10 @@ export const directorates: Directorate[] = [
       {
         label: "Mission",
         filter: { kind: "team", team: "Mission" },
-        strength: 29,
       },
       {
         label: "Programs",
         filter: { kind: "team", team: "Programs" },
-        strength: 189,
       },
     ],
   },
@@ -78,17 +70,14 @@ export const directorates: Directorate[] = [
       {
         label: "Maturity",
         filter: { kind: "team", team: "Maturity" },
-        strength: 29,
       },
       {
         label: "Ministry",
         filter: { kind: "team", team: "Ministry" },
-        strength: 58,
       },
       {
         label: "Membership",
         filter: { kind: "team", team: "Membership" },
-        strength: 106,
       },
     ],
   },
@@ -103,7 +92,6 @@ export const directorates: Directorate[] = [
           team: "Next Gen",
           suffix: "Kidszone",
         },
-        strength: 35,
       },
       {
         label: "Stir House",
@@ -112,7 +100,6 @@ export const directorates: Directorate[] = [
           team: "Next Gen",
           suffix: "Stirhouse",
         },
-        strength: 20,
       },
     ],
   },
@@ -127,7 +114,6 @@ export const directorates: Directorate[] = [
           team: "General Service",
           department: "Admin and Facility",
         },
-        strength: 2,
       },
       {
         label: "Communication (DMU)",
@@ -136,7 +122,6 @@ export const directorates: Directorate[] = [
           team: "General Service",
           department: "Communications (DMU)",
         },
-        strength: 6,
       },
       {
         label: "Finance",
@@ -145,7 +130,6 @@ export const directorates: Directorate[] = [
           team: "General Service",
           department: "Finance",
         },
-        strength: 6,
       },
     ],
   },
@@ -236,8 +220,7 @@ export const buildReport = (leaders: LeaderAggRow[]): ReportData => {
       const matching = leaders.filter(rowMatcher(row.filter));
       const present = matching.filter((l) => l.ispresent === true).length;
       const confirmed = matching.filter((l) => l.isconfirmed === true).length;
-      const strength =
-        typeof row.strength === "number" ? row.strength : matching.length;
+      const strength = matching.length;
       const absent = Math.max(strength - present, 0);
       const percentPresent = strength ? (present / strength) * 100 : 0;
       const percentConfirmed = strength ? (confirmed / strength) * 100 : 0;
