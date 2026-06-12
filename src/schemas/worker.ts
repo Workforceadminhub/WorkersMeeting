@@ -15,6 +15,20 @@ export const GENDER_OPTIONS = [
 
 const genderValues = GENDER_OPTIONS.map((option) => option.value);
 
+export const CAMPUS_OPTIONS = [
+  "Gbagada",
+  "Ajah",
+  "Apapa",
+  "Arepo",
+  "Ibadan",
+  "Ikorodu",
+  "Ilupeju",
+  "Magodo",
+  "New Lagos",
+  "Surulere",
+  "Yaba",
+] as const;
+
 export const workerSchema = z
   .object({
     first_name: z.string().trim().min(1, "First name is required"),
@@ -68,7 +82,13 @@ export const workerSchema = z
         (value) => validRoleValues.includes(value),
         "Choose a valid role"
       ),
-    campus: z.string().trim().min(1, "Campus is required"),
+    campus: z
+      .string()
+      .min(1, "Campus is required")
+      .refine(
+        (value) => (CAMPUS_OPTIONS as readonly string[]).includes(value),
+        "Choose a valid campus"
+      ),
   })
   .superRefine((data, ctx) => {
     const teamDepartments = departmentsWithTeams[data.team];

@@ -11,6 +11,7 @@ import capitalize from "lodash/capitalize";
 import Select from "./Dropdown";
 import { onlyDigits, withPlaceholder } from "../utils/input";
 import {
+  CAMPUS_OPTIONS,
   GENDER_OPTIONS,
   PHONE_LENGTH,
   defaultWorkerValues,
@@ -110,6 +111,11 @@ const WorkerForm = ({
     []
   );
 
+  const campusOptions = useMemo(
+    () => withPlaceholder(CAMPUS_OPTIONS.map((c) => ({ label: c, value: c })), "Choose campus"),
+    []
+  );
+
   const {
     control,
     register,
@@ -133,7 +139,7 @@ const WorkerForm = ({
     void trigger();
   }, [initialValues, reset, trigger]);
 
-  const capitalizeOnBlur = (field: "first_name" | "last_name" | "campus") => () => {
+  const capitalizeOnBlur = (field: "first_name" | "last_name") => () => {
     const current = getValues(field) || "";
     const next = capitalize(current.trim());
     if (next !== current) {
@@ -275,26 +281,22 @@ const WorkerForm = ({
         )}
       />
 
-      <div>
-        <label htmlFor={`${idPrefix}-campus`} className="form-label">
-          Campus
-        </label>
-        <input
-          id={`${idPrefix}-campus`}
-          type="text"
-          placeholder="Campus"
-          className="form-input"
-          aria-invalid={errors.campus ? true : undefined}
-          {...register("campus", {
-            onBlur: capitalizeOnBlur("campus"),
-          })}
-        />
-        {errors.campus && (
-          <p className="mt-1 text-xs text-red-600" role="alert">
-            {errors.campus.message}
-          </p>
+      <Controller
+        control={control}
+        name="campus"
+        render={({ field, fieldState }) => (
+          <Select
+            label="Campus"
+            options={campusOptions}
+            value={field.value}
+            onChange={field.onChange}
+            onBlur={field.onBlur}
+            hasErrors={Boolean(fieldState.error)}
+            error={fieldState.error?.message}
+            className="mb-3"
+          />
         )}
-      </div>
+      />
 
       <div className="flex space-x-3 pt-2">
         <button type="button" onClick={onCancel} className="btn-ghost w-full">
