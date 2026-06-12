@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import { useReportData } from "../services/report";
 import { useMeetingTitle } from "../services/settings";
@@ -13,7 +14,7 @@ const Cell = ({
   onClick,
   title,
 }: {
-  children?: React.ReactNode;
+  children?: ReactNode;
   className?: string;
   colSpan?: number;
   onClick?: () => void;
@@ -36,7 +37,7 @@ const HeadCell = ({
   className = "",
   colSpan,
 }: {
-  children?: React.ReactNode;
+  children?: ReactNode;
   className?: string;
   colSpan?: number;
 }) => (
@@ -209,6 +210,54 @@ const AdminReport = () => {
             </tbody>
           </table>
         </div>
+
+        {data && data.campuses.length > 0 && (
+          <div className="mt-6 overflow-x-auto rounded-lg shadow ring-1 ring-gray-200 bg-white">
+            <table className="min-w-full border-collapse">
+              <caption className="bg-orange-500 px-4 py-3 text-center text-lg font-bold uppercase tracking-wide text-white">
+                Attendance by Campus
+              </caption>
+              <thead className="bg-amber-50">
+                <tr>
+                  <HeadCell>Campus</HeadCell>
+                  <HeadCell>Strength</HeadCell>
+                  <HeadCell>Confirmed</HeadCell>
+                  <HeadCell>% Confirmed</HeadCell>
+                  <HeadCell>Present</HeadCell>
+                  <HeadCell>% of Present</HeadCell>
+                  <HeadCell>Absent</HeadCell>
+                </tr>
+              </thead>
+              <tbody>
+                {data.campuses.map((campus) => (
+                  <tr key={campus.label}>
+                    <Cell className="font-medium">{campus.label}</Cell>
+                    <Cell className="bg-amber-50 text-center font-semibold">
+                      {campus.strength}
+                    </Cell>
+                    <Cell className="bg-blue-50 text-center font-semibold">
+                      {campus.confirmed}
+                    </Cell>
+                    <Cell className="bg-blue-50 text-center">
+                      {campus.strength
+                        ? formatPercent(campus.percentConfirmed)
+                        : "—"}
+                    </Cell>
+                    <Cell className="bg-green-100 text-center font-semibold">
+                      {campus.present}
+                    </Cell>
+                    <Cell className="bg-green-100 text-center">
+                      {formatPercent(campus.percentPresent)}
+                    </Cell>
+                    <Cell className="bg-red-100 text-center">
+                      {campus.absent}
+                    </Cell>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
 
         <p className="mt-3 text-xs text-gray-500">
           Click a directorate name or a team name to open its details page.

@@ -1,6 +1,7 @@
 export type LeaderAggRow = {
   team: string | null;
   department: string | null;
+  campus?: string | null;
   ispresent: boolean | null;
   isconfirmed: boolean | null;
 };
@@ -209,9 +210,38 @@ export type DirectorateReport = {
   totals: ReportRowTotals;
 };
 
+export type CampusReport = ReportRowTotals & { label: string };
+
 export type ReportData = {
   directorates: DirectorateReport[];
+  campuses: CampusReport[];
   totals: ReportRowTotals;
+};
+
+const buildCampusReport = (leaders: LeaderAggRow[]): CampusReport[] => {
+  const byCampus = new Map<string, LeaderAggRow[]>();
+  for (const leader of leaders) {
+    const label = (leader.campus || "").trim() || "Unknown";
+    const group = byCampus.get(label);
+    if (group) group.push(leader);
+    else byCampus.set(label, [leader]);
+  }
+  return [...byCampus.entries()]
+    .map(([label, group]) => {
+      const strength = group.length;
+      const present = group.filter((l) => l.ispresent === true).length;
+      const confirmed = group.filter((l) => l.isconfirmed === true).length;
+      return {
+        label,
+        strength,
+        confirmed,
+        present,
+        absent: Math.max(strength - present, 0),
+        percentPresent: strength ? (present / strength) * 100 : 0,
+        percentConfirmed: strength ? (confirmed / strength) * 100 : 0,
+      };
+    })
+    .sort((a, b) => b.strength - a.strength || a.label.localeCompare(b.label));
 };
 
 export const buildReport = (leaders: LeaderAggRow[]): ReportData => {
@@ -276,6 +306,7 @@ export const buildReport = (leaders: LeaderAggRow[]): ReportData => {
 
   return {
     directorates: directorateReports,
+    campuses: buildCampusReport(leaders),
     totals: {
       strength,
       confirmed,
