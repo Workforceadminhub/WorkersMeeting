@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import supabase from "./supabase";
 import { buildReport, type LeaderAggRow } from "../utils/report";
-import { PAGE_SIZE, GENERIC_ERROR } from "../utils/constants";
+import { PAGE_SIZE, GENERIC_ERROR, WORKERS_TABLE } from "../utils/constants";
 
 const fetchAllLeaderAggRows = async (): Promise<LeaderAggRow[]> => {
   const all: LeaderAggRow[] = [];
@@ -9,7 +9,7 @@ const fetchAllLeaderAggRows = async (): Promise<LeaderAggRow[]> => {
   while (true) {
     const to = from + PAGE_SIZE - 1;
     const { data, error } = await supabase
-      .from("workers")
+      .from(WORKERS_TABLE)
       .select("team, department, ispresent, isconfirmed")
       .range(from, to);
     if (error) throw new Error(GENERIC_ERROR);

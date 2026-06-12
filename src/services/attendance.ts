@@ -1,10 +1,10 @@
 import { useMutation } from "@tanstack/react-query";
 import supabase from "./supabase";
 import { nowISO } from "../utils/formatting";
-import { GENERIC_ERROR } from "../utils/constants";
+import { GENERIC_ERROR, WORKERS_TABLE } from "../utils/constants";
 import type { Worker } from "../types";
 
-const table = "workers";
+const table = WORKERS_TABLE;
 
 const manualAttendance = async (person: Worker): Promise<Worker[] | null> => {
   const { data, error } = await supabase
@@ -17,6 +17,7 @@ const manualAttendance = async (person: Worker): Promise<Worker[] | null> => {
       team: person.team,
       department: person.department,
       role: person.role,
+      campus: person.campus,
       fullname: person.fullname,
       ispresent: true,
       updatedat: nowISO(),
@@ -31,7 +32,7 @@ const updateWorker = async (person: Worker): Promise<Worker[] | null> => {
   const { id } = person;
   const { data, error } = await supabase
     .from(table)
-    .update({ ispresent: true, updatedat: nowISO() })
+    .update({ ispresent: true, campus: person.campus, updatedat: nowISO() })
     .eq("id", id as number | string)
     .select("*");
 

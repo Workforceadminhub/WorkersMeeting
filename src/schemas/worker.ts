@@ -68,6 +68,7 @@ export const workerSchema = z
         (value) => validRoleValues.includes(value),
         "Choose a valid role"
       ),
+    campus: z.string().trim().min(1, "Campus is required"),
   })
   .superRefine((data, ctx) => {
     const teamDepartments = departmentsWithTeams[data.team];
@@ -96,4 +97,5 @@ export const defaultWorkerValues: z.infer<typeof workerSchema> = {
   team: "",
   department: "",
   role: "",
+  campus: "",
 };

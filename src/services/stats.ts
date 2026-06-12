@@ -1,4 +1,5 @@
 import supabase from "./supabase";
+import { WORKERS_TABLE } from "../utils/constants";
 
 type CountFilters = {
   ispresent?: boolean;
@@ -7,7 +8,7 @@ type CountFilters = {
 };
 
 export const countWorkers = async (filters: CountFilters): Promise<number> => {
-  let q = supabase.from("workers").select("*", { count: "exact", head: true });
+  let q = supabase.from(WORKERS_TABLE).select("*", { count: "exact", head: true });
   if (filters.ispresent !== undefined) q = q.eq("ispresent", filters.ispresent);
   if (filters.isconfirmed !== undefined) q = q.eq("isconfirmed", filters.isconfirmed);
   if (filters.department && filters.department !== "All") {

@@ -133,7 +133,7 @@ const WorkerForm = ({
     void trigger();
   }, [initialValues, reset, trigger]);
 
-  const capitalizeOnBlur = (field: "first_name" | "last_name") => () => {
+  const capitalizeOnBlur = (field: "first_name" | "last_name" | "campus") => () => {
     const current = getValues(field) || "";
     const next = capitalize(current.trim());
     if (next !== current) {
@@ -274,6 +274,27 @@ const WorkerForm = ({
           />
         )}
       />
+
+      <div>
+        <label htmlFor={`${idPrefix}-campus`} className="form-label">
+          Campus
+        </label>
+        <input
+          id={`${idPrefix}-campus`}
+          type="text"
+          placeholder="Campus"
+          className="form-input"
+          aria-invalid={errors.campus ? true : undefined}
+          {...register("campus", {
+            onBlur: capitalizeOnBlur("campus"),
+          })}
+        />
+        {errors.campus && (
+          <p className="mt-1 text-xs text-red-600" role="alert">
+            {errors.campus.message}
+          </p>
+        )}
+      </div>
 
       <div className="flex space-x-3 pt-2">
         <button type="button" onClick={onCancel} className="btn-ghost w-full">

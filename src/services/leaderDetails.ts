@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import supabase from "./supabase";
 import type { ReportRowFilter } from "../utils/report";
-import { PAGE_SIZE, GENERIC_ERROR } from "../utils/constants";
+import { PAGE_SIZE, GENERIC_ERROR, WORKERS_TABLE } from "../utils/constants";
 import { formatWorkerName } from "../utils/formatting";
 
 export type LeaderDetail = {
@@ -25,7 +25,7 @@ const fetchPage = async (
   to: number
 ): Promise<LeaderDetail[]> => {
   let q = supabase
-    .from("workers")
+    .from(WORKERS_TABLE)
     .select(
       "id, first_name, last_name, fullname, phone_number, team, department, role, gender, ispresent, isconfirmed, updatedat"
     )
