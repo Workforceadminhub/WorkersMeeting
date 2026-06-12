@@ -162,8 +162,6 @@ const TeamDetails = ({
 
   const filtered = useMemo(() => {
     const rows = teamNarrowed.filter((r) => {
-      // Only show workers who are marked present.
-      if (r.ispresent !== true) return false;
       if (department && r.department !== department) return false;
       if (search) {
         const needle = search.toLowerCase();
@@ -396,9 +394,9 @@ const TeamDetails = ({
       </div>
 
       <p className="mt-3 text-xs text-gray-500">
-        Showing {filtered.length} present workers
+        Showing {filtered.length} of {data?.length ?? 0} workers
         {data && data.length > filtered.length
-          ? ` (${data.length - counts.present + (counts.present - filtered.length)} hidden by filters, ${counts.absent} absent not shown)`
+          ? ` (${data.length - filtered.length} hidden by filters)`
           : ""}
         . Tap any column header to sort; tap again to reverse.
       </p>
